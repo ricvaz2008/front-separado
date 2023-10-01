@@ -4,7 +4,7 @@ const statusComunicacao = document.getElementById("erro_autorizacao");
 
 function receberResposta(pedido) {
   const queryParams = new URLSearchParams(pedido).toString();
-  const url = `http://https://brave-plant-0b3e4cc0f.3.azurestaticapps.net:80?${queryParams}`;
+  const url = `http://mercadoalves.azurewebsites.net:80?${queryParams}`;
   return fetch(url, {
     method: 'GET',
     headers: {
