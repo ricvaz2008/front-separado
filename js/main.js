@@ -4,14 +4,10 @@ const statusComunicacao = document.getElementById("erro_autorizacao");
 
 function receberResposta(acao,pedido) {
   const queryParams = new URLSearchParams(pedido).toString();
-  const urltemp = "https://mercadoalves-mercado.azuremicroservices.io/"+acao;
-  const url = urltemp + "?" + queryParams;
-  console.log(url);
+  const url = `http://localhost:5000/usuarios/verifica-acesso?login=Ric&senha=Ric`;
+  console.log(url)
   return fetch(url, {
     method: 'GET',
-    headers: {
-      'Content-Type': 'application/json'
-    },
   })
   .then(response => {
     if (!response.ok) {
@@ -39,15 +35,17 @@ form.addEventListener("submit", (evento) => {
     login: evento.target.elements['nome_usuario'].value,
     senha: evento.target.elements['senha_usuario'].value
   };
-  const acao = "usuarios/verifica-acesso";
+  const acao = "verifica-acesso";
 
   receberResposta(acao,pedido)
-    .then(acesso => {
-      acesso = acesso.toUpperCase();
-      if (acesso == "FUNCIONÁRIO") acesso = "FUNCIONARIO";
-      if (acesso === "ADMINISTRADOR" || acesso === "FUNCIONARIO") {
+    .then(responseData => {
+      console.log(responseData)
+      const acesso = responseData.acesso;
+      const acessoUpperCase = acesso.toUpperCase();
+      if (acessoUpperCase  == "FUNCIONÁRIO") acessoUpperCase  = "FUNCIONARIO";
+      if (acessoUpperCase  === "ADMINISTRADOR" || acessoUpperCase  === "FUNCIONARIO") {
         localStorage.setItem("caixa", JSON.stringify(evento.target.elements['nome_usuario'].value));
-        localStorage.setItem("acesso", JSON.stringify(acesso));
+        localStorage.setItem("acesso", JSON.stringify(acessoUpperCase));
         location.href = 'tela-principal.html';
       } else {
         statusCadastro.classList.remove("funcao_esconder");
