@@ -23,14 +23,12 @@ function deletarPedido(pedido) {
   });
 }
 
-function receberResposta(pedido) {
+function receberResposta(acao,pedido) {
   const queryParams = new URLSearchParams(pedido).toString();
-  const url = `http://localhost:3000?${queryParams}`;
+  const url = `https://mercadoalves-mercado.azuremicroservices.io/${acao}?${queryParams}`;
+  console.log(url)
   return fetch(url, {
     method: 'GET',
-    headers: {
-      'Content-Type': 'application/json'
-    },
   })
     .then(response => {
       if (!response.ok) {
@@ -131,11 +129,11 @@ function limpaTabela() {
 }
 
 function criaTabela(coluna, ordem) {
-  pedido = {
-    action: "atualizaFuncionarios",
+  /*pedido = {
     coluna: coluna,
     ordem: ordem
-  };
+  };*/
+  const acao = "usuarios/listar";
   receberResposta(pedido)
     .then((listaFuncionarios) => {
       tabelaTransicao = [];

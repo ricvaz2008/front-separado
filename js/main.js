@@ -4,7 +4,7 @@ const statusComunicacao = document.getElementById("erro_autorizacao");
 
 function receberResposta(acao,pedido) {
   const queryParams = new URLSearchParams(pedido).toString();
-  const url = `https://mercadoalves-mercado.azuremicroservices.io/usuarios/${acao}?${queryParams}`;
+  const url = `https://mercadoalves-mercado.azuremicroservices.io/${acao}?${queryParams}`;
   console.log(url)
   return fetch(url, {
     method: 'GET',
@@ -35,7 +35,7 @@ form.addEventListener("submit", (evento) => {
     login: evento.target.elements['nome_usuario'].value,
     senha: evento.target.elements['senha_usuario'].value
   };
-  const acao = "verifica-acesso";
+  const acao = "usuarios/verifica-acesso";
 
   receberResposta(acao,pedido)
     .then(responseData => {
