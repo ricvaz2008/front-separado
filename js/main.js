@@ -2,9 +2,11 @@ const form = document.getElementById("acesso_usuario_senha");
 const statusCadastro = document.getElementById("usuario_cadastro");
 const statusComunicacao = document.getElementById("erro_autorizacao");
 
-function receberResposta(pedido) {
+function receberResposta(acao,pedido) {
   const queryParams = new URLSearchParams(pedido).toString();
-  const url = `https://mercadoalves-mercado.azuremicroservices.io/usuarios?${queryParams}`;
+  const urltemp = "https://mercadoalves-mercado.azuremicroservices.io/"+acao;
+  const url = urltemp + "?" + queryParams;
+  console.log(url);
   return fetch(url, {
     method: 'GET',
     headers: {
@@ -34,12 +36,12 @@ form.addEventListener("submit", (evento) => {
   evento.preventDefault();
 
   const pedido = {
-    action: "verificaAcesso",
-    usuario: evento.target.elements['nome_usuario'].value,
+    login: evento.target.elements['nome_usuario'].value,
     senha: evento.target.elements['senha_usuario'].value
   };
+  const acao = "usuarios/verifica-acesso";
 
-  receberResposta(pedido)
+  receberResposta(acao,pedido)
     .then(acesso => {
       acesso = acesso.toUpperCase();
       if (acesso == "FUNCIONÁRIO") acesso = "FUNCIONARIO";
