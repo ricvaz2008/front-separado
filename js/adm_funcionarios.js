@@ -15,13 +15,13 @@ var acao = "usuarios";
 criaTabela(coluna, ordem);
 
 function deletarPedido(acao) {
-  return fetch(`https://mercadoalves.azurewebsites.net/${acao}`, {
+  return fetch(`https://mercadoalves-mercado.azuremicroservices.io/${acao}`, {
     method: 'DELETE',
   });
 }
 
 function receberResposta(acao,pedido) {
-  const url = `https://mercadoalves.azurewebsites.net/${acao}`;
+  const url = `https://mercadoalves-mercado.azuremicroservices.io/${acao}`;
   console.log(url)
   return fetch(url, {
     method: 'GET',

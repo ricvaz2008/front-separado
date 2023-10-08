@@ -57,7 +57,7 @@ function atualizaTabela() {
 }
 
 function enviarPedido(pedido) {
-  const url = 'https://mercadoalves.azurewebsites.net/';
+  const url = 'https://mercadoalves-mercado.azuremicroservices.io/';
 
   return fetch(url, {
     method: 'POST',
@@ -69,7 +69,7 @@ function enviarPedido(pedido) {
 }
 
 function mudarPedido(pedido) {
-  return fetch("https://mercadoalves.azurewebsites.net/", {
+  return fetch("https://mercadoalves-mercado.azuremicroservices.io/", {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json'
@@ -80,7 +80,7 @@ function mudarPedido(pedido) {
 
 function receberResposta(pedido) {
   const queryParams = new URLSearchParams(pedido).toString();
-  const url = `https://mercadoalves.azurewebsites.net/${acao}?${queryParams}`;
+  const url = `https://mercadoalves-mercado.azuremicroservices.io/${acao}?${queryParams}`;
   return fetch(url, {
     method: 'GET',
   })

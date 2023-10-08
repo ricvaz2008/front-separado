@@ -14,7 +14,7 @@ acao="clientes";
 
 function receberMensagem(pedido) {
   const queryParams = new URLSearchParams(pedido).toString();
-  const url = `https://mercadoalves.azurewebsites.net/${acao}?${queryParams}`;
+  const url = `https://mercadoalves-mercado.azuremicroservices.io/${acao}?${queryParams}`;
   return fetch(url, {
     method: 'GET',
   });

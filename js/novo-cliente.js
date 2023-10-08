@@ -10,7 +10,7 @@ let novoCEP = document.getElementById("cep");
 var acao = "clientes";
 
 function enviarMensagem(acao,pedido) {
-  return fetch(`https://mercadoalves.azurewebsites.net/${acao}`, {
+  return fetch(`https://mercadoalves-mercado.azuremicroservices.io/${acao}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'

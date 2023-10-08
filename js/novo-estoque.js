@@ -11,7 +11,7 @@ var endFoto = "";
 var acao = "estoque";
 
 function enviarMensagem(acao,pedido) {
-  return fetch(`https://mercadoalves.azurewebsites.net/${acao}`, {
+  return fetch(`https://mercadoalves-mercado.azuremicroservices.io/${acao}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
