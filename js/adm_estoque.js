@@ -147,7 +147,7 @@ function apagaItem() {
           quantidadeEdicao = 0;
           acao = "";
           limpaTabela();
-          criaTabela(coluna, ordem);
+          criaTabela(ordem);
         }
       });
   }
@@ -164,7 +164,6 @@ function limpaTabela() {
 
 function criaTabela(ordem) {
   acao = "estoque?sort=" + ordem;
-  console.log(acao)
   receberResposta(acao)
     .then((resposta) => {
       resposta = resposta.content;

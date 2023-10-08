@@ -5,12 +5,14 @@ let novoLogin = document.getElementById("loginFuncionario");
 let novaSenha = document.getElementById("senhaFuncionario");
 var indexador = JSON.parse(localStorage.getItem("idDetalhe"));
 let novoAcesso = document.getElementById("acesso");
+acao = "usuarios";
 
 encontraItem();
 
-function receberResposta(pedido) {
+function receberResposta(acao,pedido) {
   const queryParams = new URLSearchParams(pedido).toString();
   const url = `http://localhost:5000/${acao}?${queryParams}`;
+  console.log(url)
   return fetch(url, {
     method: 'GET',
   })
@@ -33,10 +35,8 @@ function receberResposta(pedido) {
   });
 }
 
-function mudarPedido(pedido) {
-  const queryParams = new URLSearchParams(pedido).toString();
-  const url = `https://localhost:5000/${acao}?${queryParams}`;
-  return fetch(url, {
+function mudarPedido(acao,pedido) {
+  return fetch(`http://localhost:5000/${acao}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json'
@@ -47,10 +47,10 @@ function mudarPedido(pedido) {
 
 function encontraItem() {
   pedido = {
-    action: "localizaFuncionario",
-    parametro1: indexador,
+    id: indexador,
   };
-  receberResposta(pedido)
+  acao = acao + "/localiza-usuario";
+  receberResposta(acao,pedido)
     .then(produto => {
       novoNome.value = produto.nome;
       novoID.value = produto.id;
@@ -63,7 +63,6 @@ function encontraItem() {
 
 function confirmaCadastro() {
   pedido = {
-    action: "modificaFuncionario",
     id: indexador,
     nome: novoNome.value,
     cargo: novoCargo.value,
@@ -71,7 +70,8 @@ function confirmaCadastro() {
     senha: novaSenha.value,
     acesso: novoAcesso.value
   };
-  mudarPedido(pedido)
+  acao = "usuarios";
+  mudarPedido(acao,pedido)
     .then((resposta) => resposta.json())
     .then(statusCadastro => {
 

@@ -7,9 +7,10 @@ let novoEndereco = document.getElementById("endereco");
 let novoCidade = document.getElementById("cidade");
 let novoEstado = document.getElementById("estado");
 let novoCEP = document.getElementById("cep");
+var acao = "clientes";
 
-function enviarMensagem(pedido) {
-  return fetch('http://localhost:3000', {
+function enviarMensagem(acao,pedido) {
+  return fetch(`http://localhost:5000/${acao}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -25,9 +26,13 @@ function apagar() {
 function confirmaCadastro() {
   if (novoNome && novoNascimento && novoCPF && novoTelefone && novoEmail && novoEndereco && novoCidade && novoEstado && novoCEP) {
     const data = new Date(novoNascimento.value);
-    novoNascimento.value = `${data.getFullYear()}-${data.getMonth() + 1}-${data.getDate()}`;
+    const year = data.getFullYear();
+    const month = (data.getMonth() + 1).toString().padStart(2, '0');
+    const day = data.getDate().toString().padStart(2, '0');
+
+    novoNascimento.value = year + "-" + month + "-" + day;
+    novoNascimento
     const pedido = {
-      action: "novoItemCliente",
       nome: novoNome.value,
       nascimento: novoNascimento.value,
       cpf: novoCPF.value,
@@ -38,12 +43,12 @@ function confirmaCadastro() {
       estado: novoEstado.value,
       cep: novoCEP.value
     };
-    enviarMensagem(pedido)
-      .then((resposta) => resposta.json())
-      .then(statusCadastro => {
-        if (statusCadastro.status == "itemCadastrado") {
-          apagar();
-        }
+    enviarMensagem(acao,pedido)
+    .then((resposta) => resposta.json())
+    .then(statusCadastro => {
+      if (statusCadastro.status == "itemCadastrado") {
+        apagar();
+      }
       });
   }
 }

@@ -48,7 +48,6 @@ function confirmaCadastro() {
       status: estVenda.value,
       foto: novaFoto.src
     };
-    console.log(pedido)
     enviarMensagem(acao,pedido)
       .then((resposta) => resposta.json())
       .then(statusCadastro => {

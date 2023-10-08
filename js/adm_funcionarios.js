@@ -15,14 +15,14 @@ var acao = "usuarios";
 criaTabela(coluna, ordem);
 
 function deletarPedido(acao) {
-  return fetch("https://mercadoalves-mercado.azuremicroservices.io/${acao}", {
+  return fetch(`http://localhost:5000/${acao}`, {
     method: 'DELETE',
   });
 }
 
-function receberResposta(acao,pedido) {
-  const queryParams = new URLSearchParams(pedido).toString();
-  const url = `http://localhost:5000/${acao}?${queryParams}`;
+function receberResposta(acao) {
+  const url = `http://localhost:5000/${acao}`;
+  console.log(url)
   return fetch(url, {
     method: 'GET',
   })
@@ -99,30 +99,35 @@ function editaItem() {
 function apagaItem() {
   var linhasSelecionadas = document.querySelectorAll(".edita_linha");
   linhasApagar = Array.from(linhasSelecionadas).map((element) => {
-    return element.cells[0].innerHTML;
+    return element.cells.item(0).innerHTML;
   });
   tamanho = linhasApagar.length;
-
-  for (i = 0; i < tamanho; i++) {
-    acao = "/usuarios/"+i;
+  for (var i = 0; i < tamanho; i++) {
+    acao = "usuarios/" + linhasApagar[i],
     deletarPedido(acao)
-    quantidadeEdicao = 0;
+      .then((resposta) => resposta.json())
+      .then((statusApaga) => {
+
+        if (statusApaga.message === "itemApagado") {
+          quantidadeEdicao = 0;
+          acao = "";
+          limpaTabela();
+          criaTabela(ordem);
+        }
+      });
   }
-  limpaTabela();
-  criaTabela(coluna, ordem);
 }
 
 function limpaTabela() {
-  var tamanho = tabelaResultante.rows.length;
-
+  tamanho = tabelaResultante.rows.length;
   for (var i = 0; i < tamanho; i++) {
     tabelaResultante.deleteRow(0);
   }
   tabelaTransicao = [[]];
 }
 
-function criaTabela(coluna, ordem) {
-
+function criaTabela(ordem) {
+  acao = "usuarios?sort=" + ordem;
   receberResposta(acao)
     .then((listaFuncionarios) => {
     listaFuncionarios = listaFuncionarios.content;
@@ -161,49 +166,49 @@ function criaTabela(coluna, ordem) {
 organiza_col_zero.addEventListener("click", (event) => {
   coluna = "id";
 
-  if (ordem_zero == "ASC") ordem_zero = "DESC";
-  else ordem_zero = "ASC";
-  ordem = ordem_zero;
+  if (ordem_zero == "asc") ordem_zero = "desc";
+  else ordem_zero = "asc";
+  ordem = coluna + "," + ordem_zero;
   limpaTabela();
-  criaTabela(coluna, ordem);
+  criaTabela(ordem);
 });
 
 organiza_col_um.addEventListener("click", (event) => {
   coluna = "nome";
 
-  if (ordem_um == "ASC") ordem_um = "DESC";
-  else ordem_um = "ASC";
-  ordem = ordem_um;
+  if (ordem_um == "asc") ordem_um = "desc";
+  else ordem_um = "asc";
+  ordem = coluna + "," + ordem_um;
   limpaTabela();
-  criaTabela(coluna, ordem);
+  criaTabela(ordem);
 });
 
 organiza_col_dois.addEventListener("click", (event) => {
   coluna = "cargo";
 
-  if (ordem_dois == "ASC") ordem_dois = "DESC";
-  else ordem_dois = "ASC";
-  ordem = ordem_dois;
+  if (ordem_dois == "asc") ordem_dois = "desc";
+  else ordem_dois = "asc";
+  ordem = coluna + "," + ordem_dois;
   limpaTabela();
-  criaTabela(coluna, ordem);
+  criaTabela(ordem);
 });
 
 organiza_col_tres.addEventListener("click", (event) => {
   coluna = "login";
 
-  if (ordem_tres == "ASC") ordem_tres = "DESC";
-  else ordem_tres = "ASC";
-  ordem = ordem_tres;
+  if (ordem_tres == "asc") ordem_tres = "desc";
+  else ordem_tres = "asc";
+  ordem = coluna + "," + ordem_tres;
   limpaTabela();
-  criaTabela(coluna, ordem);
+  criaTabela(ordem);
 });
 
 organiza_col_quatro.addEventListener("click", (event) => {
   coluna = "login";
 
-  if (ordem_quatro == "ASC") ordem_quatro = "DESC";
-  else ordem_quatro = "ASC";
-  ordem = ordem_quatro;
+  if (ordem_quatro == "asc") ordem_quatro = "desc";
+  else ordem_quatro = "asc";
+  ordem = coluna + "," + ordem_quatro;
   limpaTabela();
-  criaTabela(coluna, ordem);
+  criaTabela(ordem);
 });

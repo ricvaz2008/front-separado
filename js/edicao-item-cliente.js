@@ -8,12 +8,14 @@ let novoCidade = document.getElementById("cidade");
 let novoEstado = document.getElementById("estado");
 let novoCEP = document.getElementById("cep");
 var indexador = JSON.parse(localStorage.getItem("idDetalhe"));
+acao="clientes";
 
 encontraItem();
 
-function receberResposta(pedido) {
+function receberResposta(acao,pedido) {
   const queryParams = new URLSearchParams(pedido).toString();
   const url = `http://localhost:5000/${acao}?${queryParams}`;
+  console.log(url)
   return fetch(url, {
     method: 'GET',
   })
@@ -36,8 +38,8 @@ function receberResposta(pedido) {
   });
 }
 
-function mudarPedido(pedido) {
-  return fetch("http://localhost:3000", {
+function mudarPedido(acao,pedido) {
+  return fetch(`http://localhost:5000/${acao}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json'
@@ -48,10 +50,11 @@ function mudarPedido(pedido) {
 
 function encontraItem() {
   pedido = {
-    action: "localizaCliente",
     cpf: indexador,
   };
-  receberResposta(pedido)
+  acao = acao + "/localiza-cliente";
+
+  receberResposta(acao,pedido)
     .then(cliente => {
       novoNome.value = cliente.nome;
       data = new Date(cliente.nascimento);
@@ -67,10 +70,13 @@ function encontraItem() {
 }
 
 function confirmaCadastro() {
-  data = new Date(novoNascimento.value);
-  novoNascimento.value = (data.getFullYear()) + "-" + (data.getMonth() + 1) + "-" + (data.getDate());
+  const data = new Date(novoNascimento.value);
+  const year = data.getFullYear();
+  const month = (data.getMonth() + 1).toString().padStart(2, '0');
+  const day = data.getDate().toString().padStart(2, '0');
+
+  novoNascimento.value = year + "-" + month + "-" + day;
   pedido = {
-    action: "modificaCliente",
     nome: novoNome.value,
     nascimento: novoNascimento.value,
     cpf: novoCPF.value,
@@ -81,7 +87,8 @@ function confirmaCadastro() {
     estado: novoEstado.value,
     cep: novoCEP.value
   };
-  mudarPedido(pedido)
+  acao = "clientes";
+  mudarPedido(acao,pedido)
     .then((resposta) => resposta.json())
     .then(statusCadastro => {
       if (statusCadastro.message == "modificado") {

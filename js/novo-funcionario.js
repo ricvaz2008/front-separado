@@ -4,10 +4,10 @@ let novoCargo = document.getElementById("cargoFuncionario");
 let novoLogin = document.getElementById("loginFuncionario");
 let novaSenha = document.getElementById("senhaFuncionario");
 let novoAcesso = document.getElementById("acesso");
+acao = "usuarios";
 
-function enviarMensagem(pedido) {
-  const url = 'http://localhost:3000/';
-  return fetch(url, {
+function enviarMensagem(acao,pedido) {
+  return fetch(`http://localhost:5000/${acao}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -26,7 +26,6 @@ function apagar() {
 
 function confirmaCadastro() {
   const pedido = {
-    action: "novoItemFuncionario",
     id: novoId.value,
     nome: novoNome.value,
     cargo: novoCargo.value,
@@ -34,7 +33,7 @@ function confirmaCadastro() {
     senha: novaSenha.value,
     acesso: novoAcesso.value,
   };
-  enviarMensagem(pedido)
+  enviarMensagem(acao,pedido)
     .then((resposta) => resposta.json())
     .then(statusCadastro => {
       if (statusCadastro.status == "itemCadastrado") {
