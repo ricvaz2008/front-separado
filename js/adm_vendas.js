@@ -15,12 +15,9 @@ criaTabela(coluna, ordem);
 
 function receberResposta(pedido) {
   const queryParams = new URLSearchParams(pedido).toString();
-  const url = `http://localhost:3000?${queryParams}`;
+  const url = `http://localhost:5000/${acao}?${queryParams}`;
   return fetch(url, {
     method: 'GET',
-    headers: {
-      'Content-Type': 'application/json'
-    },
   })
   .then(response => {
     if (!response.ok) {

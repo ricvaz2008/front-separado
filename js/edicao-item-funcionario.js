@@ -10,12 +10,9 @@ encontraItem();
 
 function receberResposta(pedido) {
   const queryParams = new URLSearchParams(pedido).toString();
-  const url = `http://localhost:3000?${queryParams}`;
+  const url = `http://localhost:5000/${acao}?${queryParams}`;
   return fetch(url, {
     method: 'GET',
-    headers: {
-      'Content-Type': 'application/json'
-    },
   })
   .then(response => {
     if (!response.ok) {
@@ -37,7 +34,9 @@ function receberResposta(pedido) {
 }
 
 function mudarPedido(pedido) {
-  return fetch("http://localhost:3000", {
+  const queryParams = new URLSearchParams(pedido).toString();
+  const url = `https://localhost:5000/${acao}?${queryParams}`;
+  return fetch(url, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json'

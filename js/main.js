@@ -4,8 +4,7 @@ const statusComunicacao = document.getElementById("erro_autorizacao");
 
 function receberResposta(acao,pedido) {
   const queryParams = new URLSearchParams(pedido).toString();
-  const url = `https://mercadoalves-mercado.azuremicroservices.io/${acao}?${queryParams}`;
-  console.log(url)
+  const url = `http://localhost:5000/${acao}?${queryParams}`;
   return fetch(url, {
     method: 'GET',
   })

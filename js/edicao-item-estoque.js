@@ -9,17 +9,16 @@ let quantProduto = document.getElementById("quantidade");
 let estVenda = document.getElementById("situacao");
 var endFoto = document.getElementById("foto_produto");
 var indexador = JSON.parse(localStorage.getItem("idDetalhe"));
+var acao = "estoque"
 
 encontraItem();
 
-function receberResposta(pedido) {
+function receberResposta(acao,pedido) {
   const queryParams = new URLSearchParams(pedido).toString();
-  const url = `http://localhost:3000?${queryParams}`;
+  const url = `http://localhost:5000/${acao}?${queryParams}`;
+  console.log(url)
   return fetch(url, {
     method: 'GET',
-    headers: {
-      'Content-Type': 'application/json'
-    },
   })
   .then(response => {
     if (!response.ok) {
@@ -40,8 +39,8 @@ function receberResposta(pedido) {
   });
 }
 
-function mudarPedido(pedido) {
-  return fetch("http://localhost:3000", {
+function mudarPedido(acao,pedido) {
+  return fetch(`http://localhost:5000/${acao}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json'
@@ -52,11 +51,11 @@ function mudarPedido(pedido) {
 
 function encontraItem() {
   pedido = {
-    action: "localizaEstoque",
-    codProduto: indexador,
+    codigo: indexador,
   };
+  acao = acao + "/localiza-estoque";
 
-  receberResposta(pedido)
+  receberResposta(acao,pedido)
     .then(produto => {
       nomeProduto.value = produto.produto;
       codProduto.value = produto.codigo;
@@ -76,10 +75,13 @@ function carregaFoto(){
 }
 
 function confirmaCadastro() {
-  data = new Date (vencProduto.value);
-  vencProduto.value = (data.getFullYear()) + "-" + (data.getMonth() + 1) + "-" + (data.getDate());
+  const data = new Date(vencProduto.value);
+  const year = data.getFullYear();
+  const month = (data.getMonth() + 1).toString().padStart(2, '0');
+  const day = data.getDate().toString().padStart(2, '0');
+
+  vencProduto.value = year + "-" + month + "-" + day;
   pedido = {
-    action: "modificaEstoque",
     codigo: codProduto.value,
     produto: nomeProduto.value,
     lote: loteProduto.value,
@@ -89,7 +91,8 @@ function confirmaCadastro() {
     status: estVenda.value,
     foto: novaFoto.src
   };
-  mudarPedido(pedido)
+  acao = "estoque";
+  mudarPedido(acao,pedido)
     .then((resposta) => resposta.json())
     .then(statusCadastro => {
       if (statusCadastro.message == "modificado") {

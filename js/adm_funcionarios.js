@@ -10,23 +10,19 @@ var numeroColunas = 5;
 var itensTela = 6;
 var quantidadeEdicao = 0;
 var pedido = {};
+var acao = "usuarios";
 
 criaTabela(coluna, ordem);
 
-function deletarPedido(pedido) {
-  return fetch("http://localhost:3000", {
+function deletarPedido(acao) {
+  return fetch("https://mercadoalves-mercado.azuremicroservices.io/${acao}", {
     method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(pedido)
   });
 }
 
 function receberResposta(acao,pedido) {
   const queryParams = new URLSearchParams(pedido).toString();
-  const url = `https://mercadoalves-mercado.azuremicroservices.io/${acao}?${queryParams}`;
-  console.log(url)
+  const url = `http://localhost:5000/${acao}?${queryParams}`;
   return fetch(url, {
     method: 'GET',
   })
@@ -108,11 +104,8 @@ function apagaItem() {
   tamanho = linhasApagar.length;
 
   for (i = 0; i < tamanho; i++) {
-    pedido = {
-      action: "apagaItemFuncionario",
-      itensApagar: linhasApagar[i],
-    };
-    deletarPedido(pedido)
+    acao = "/usuarios/"+i;
+    deletarPedido(acao)
     quantidadeEdicao = 0;
   }
   limpaTabela();
@@ -129,13 +122,10 @@ function limpaTabela() {
 }
 
 function criaTabela(coluna, ordem) {
-  /*pedido = {
-    coluna: coluna,
-    ordem: ordem
-  };*/
-  const acao = "usuarios/listar";
-  receberResposta(pedido)
+
+  receberResposta(acao)
     .then((listaFuncionarios) => {
+    listaFuncionarios = listaFuncionarios.content;
       tabelaTransicao = [];
       tamanho = Object.keys(listaFuncionarios).length;
 

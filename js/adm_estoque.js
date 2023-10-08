@@ -3,56 +3,57 @@ var itensApagar = [];
 var itemEditar = [];
 var tabelaTransicao = [[]];
 var coluna = "codigo";
-var ordem = "ASC";
+var ordem = "codigo,asc";
 var ordem_zero = "crescente";
 var ordem_um = "crescente";
 var ordem_dois = "crescente";
 var ordem_tres = "crescente";
 var ordem_quatro = "crescente";
+var ordem_cinco = "crescente";
+var ordem_seis = "crescente";
 var tipo = "texto";
 var itensTela = 7;
 var quantidadeEdicao = 0;
 var pedido = {};
 var identificacaoVencimento = document.getElementById("notifica_vencimento");
+var acao = "estoque";
 
-criaTabela(coluna, ordem);
+criaTabela(ordem);
 
-function deletarPedido(pedido) {
-  return fetch("http://localhost:3000", {
+function deletarPedido(acao) {
+  console.log(acao)
+  return fetch(`http://localhost:5000/${acao}`, {
     method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(pedido)
+  })
+  .catch(error => {
+    console.error('Erro ao enviar a solicitação de exclusão:', error);
+    throw error; // Re-throw the error to be handled where the function is called
   });
 }
 
-function receberResposta(pedido) {
-  const queryParams = new URLSearchParams(pedido).toString();
-  const url = `http://localhost:3000?${queryParams}`;
+function receberResposta(acao) {
+  const url = `http://localhost:5000/${acao}`;
+  console.log(url)
   return fetch(url, {
     method: 'GET',
-    headers: {
-      'Content-Type': 'application/json'
-    },
   })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error(`Erro na requisição. Status: ${response.status}`);
-      }
-      return response.json().catch(() => response.text());
-    })
-    .then(data => {
-      if (data) {
-        return data;
-      } else {
-        throw new Error('Resposta inválida do servidor');
-      }
-    })
-    .catch(error => {
-      console.error('Erro:', error);
-      throw new Error('Erro ao processar a resposta do servidor');
-    });
+  .then(response => {
+    if (!response.ok) {
+      throw new Error(`Erro na requisição. Status: ${response.status}`);
+    }
+    return response.json().catch(() => response.text());
+  })
+  .then(data => {
+    if (data) {
+      return data;
+    } else {
+      throw new Error('Resposta inválida do servidor');
+    }
+  })
+  .catch(error => {
+    console.error('Erro:', error);
+    throw new Error('Erro ao processar a resposta do servidor');
+  });
 }
 
 function formataData(dataFormatada) {
@@ -71,7 +72,7 @@ function sinalizaVencimento(dias) {
   var tamanho = tabelaResultante.rows.length;
   for (var i = 0; i < tamanho; i++) {
     var vencimento = tabelaResultante.rows[i].cells[5].innerHTML;
-    var vencimentoFormatado = new Date (formataData(vencimento));
+    var vencimentoFormatado = new Date(formataData(vencimento));
     var prazoParaVencimento = (vencimentoFormatado - hoje) / 1000 / 60 / 60 / 24;
     if (prazoParaVencimento <= dias) {
       tabelaResultante.rows[i].cells[5].classList.add("edicao_vencido");
@@ -137,16 +138,14 @@ function apagaItem() {
   });
   tamanho = linhasApagar.length;
   for (var i = 0; i < tamanho; i++) {
-    pedido = {
-      action: "apagaItemEstoque",
-      itensApagar: linhasApagar[i],
-    };
-    deletarPedido(pedido)
+    acao = acao + "/" + linhasApagar[i],
+    deletarPedido(acao)
       .then((resposta) => resposta.json())
       .then((statusApaga) => {
 
-        if (statusApaga.message === "item apagado") {
+        if (statusApaga.message === "itemApagado") {
           quantidadeEdicao = 0;
+          acao = "";
           limpaTabela();
           criaTabela(coluna, ordem);
         }
@@ -163,20 +162,20 @@ function limpaTabela() {
   identificacaoVencimento.value = "";
 }
 
-function criaTabela(coluna, ordem) {
-  pedido = {
-    action: "atualizaEstoque",
-    coluna: coluna,
-    ordem: ordem
-  };
-  receberResposta(pedido)
+function criaTabela(ordem) {
+  acao = "estoque?sort=" + ordem;
+  console.log(acao)
+  receberResposta(acao)
     .then((resposta) => {
+      resposta = resposta.content;
       tabelaTransicao = [];
       tamanho = Object.keys(resposta).length;
       for (const key in resposta) {
         if (resposta.hasOwnProperty(key)) {
           const item = resposta[key];
-          const codigo = item.codigo;
+          var codigo = item.codigo;
+          const parts = codigo.split("LOTE");
+          codigo = parts[0];
           const produto = item.produto;
           const lote = item.lote;
           let quantidade = item.quantidade;
@@ -208,69 +207,70 @@ function criaTabela(coluna, ordem) {
         }
       }
     });
+    acao="";
 }
 
 organiza_col_zero.addEventListener("click", (event) => {
   coluna = "codigo";
-  if (ordem_zero == "ASC") ordem_zero = "DESC";
-  else ordem_zero = "ASC";
-  ordem = ordem_zero;
+  if (ordem_zero == "asc") ordem_zero = "desc";
+  else ordem_zero = "asc";
+  ordem = coluna + "," + ordem_zero;
   limpaTabela();
-  criaTabela(coluna, ordem);
+  criaTabela(ordem);
 });
 
 organiza_col_um.addEventListener("click", (event) => {
   coluna = "produto";
-  if (ordem_um == "ASC") ordem_um = "DESC";
-  else ordem_um = "ASC";
-  ordem = ordem_um;
+  if (ordem_um == "asc") ordem_um = "desc";
+  else ordem_um = "asc";
+  ordem = coluna + "," + ordem_um;
   limpaTabela();
-  criaTabela(coluna, ordem);
+  criaTabela(ordem);
 });
 
 organiza_col_dois.addEventListener("click", (event) => {
   coluna = "lote";
-  if (ordem_dois == "ASC") ordem_dois = "DESC";
-  else ordem_dois = "ASC";
-  ordem = ordem_dois;
+  if (ordem_dois == "asc") ordem_dois = "desc";
+  else ordem_dois = "asc";
+  ordem = coluna + "," + ordem_dois;
   limpaTabela();
-  criaTabela(coluna, ordem);
+  criaTabela(ordem);
 });
 
 organiza_col_tres.addEventListener("click", (event) => {
   coluna = "quantidade";
-  if (ordem_tres == "ASC") ordem_tres = "DESC";
-  else ordem_tres = "ASC";
-  ordem = ordem_tres;
+  if (ordem_tres == "asc") ordem_tres = "desc";
+  else ordem_tres = "asc";
+  ordem = coluna + "," + ordem_tres;
   limpaTabela();
-  criaTabela(coluna, ordem);
+  criaTabela(ordem);
 });
 
 organiza_col_quatro.addEventListener("click", (event) => {
   coluna = "valor";
-  if (ordem_quatro == "ASC") ordem_quatro = "DESC";
-  else ordem_quatro = "ASC";
-  ordem = ordem_quatro;
+  if (ordem_quatro == "asc") ordem_quatro = "desc";
+  else ordem_quatro = "asc";
+  ordem = coluna + "," + ordem_quatro;
   limpaTabela();
-  criaTabela(coluna, ordem);
+  criaTabela(ordem);
 });
 
 organiza_col_cinco.addEventListener("click", (event) => {
   coluna = "vencimento";
-  if (ordem_quatro == "ASC") ordem_quatro = "DESC";
-  else ordem_quatro = "ASC";
-  ordem = ordem_quatro;
+  if (ordem_cinco == "asc") ordem_cinco = "desc";
+  else ordem_cinco = "asc";
+  ordem = coluna + "," + ordem_cinco;
   limpaTabela();
-  criaTabela(coluna, ordem);
+  criaTabela(ordem);
 });
 
 organiza_col_seis.addEventListener("click", (event) => {
   coluna = "status";
-  if (ordem_quatro == "ASC") ordem_quatro = "DESC";
-  else ordem_quatro = "ASC";
-  ordem = ordem_quatro;
+  if (ordem_seis == "asc") ordem_seis = "desc";
+  else ordem_seis = "asc";
+  ordem = coluna + "," + ordem_seis;
   limpaTabela();
-  criaTabela(coluna, ordem);
+  criaTabela(ordem);
 });
 
 notifica_vencimento.addEventListener("change", (event) => {
