@@ -7,30 +7,32 @@ let cpf = document.getElementById("cpf_cliente");
 let situacaoCadastro = document.getElementById("cliente_cadastro");
 let pedido = {};
 localStorage.removeItem("dadosCliente");
+acao = "clientes";
 
-function receberResposta(pedido) {
+function receberResposta(acao,pedido) {
   const queryParams = new URLSearchParams(pedido).toString();
   const url = `http://localhost:5000/${acao}?${queryParams}`;
+  console.log(url)
   return fetch(url, {
     method: 'GET',
   })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error(`Erro na requisição. Status: ${response.status}`);
-      }
-      return response.json().catch(() => response.text());
-    })
-    .then(data => {
-      if (data) {
-        return data;
-      } else {
-        throw new Error('Resposta inválida do servidor');
-      }
-    })
-    .catch(error => {
-      console.error('Erro:', error);
-      throw new Error('Erro ao processar a resposta do servidor');
-    });
+  .then(response => {
+    if (!response.ok) {
+      throw new Error(`Erro na requisição. Status: ${response.status}`);
+    }
+    return response.json().catch(() => response.text());
+  })
+  .then(data => {
+    if (data) {
+      return data;
+    } else {
+      throw new Error('Resposta inválida do servidor');
+    }
+  })
+  .catch(error => {
+    console.error('Erro:', error);
+    throw new Error('Erro ao processar a resposta do servidor');
+  });
 }
 
 function iniciaVenda(cpf, cliente) {
@@ -68,10 +70,10 @@ function sairPopup() {
 function localizaCliente() {
   if (!cpf.value) cpf.value = "000";
     const pedido = {
-      action: "localizaCliente",
       cpf: cpf.value
     };
-    receberResposta(pedido)
+    acao = acao + "/localiza-cliente";
+    receberResposta(acao,pedido)
       .then(cliente => {
         if (cliente.nome != "usuario nao cadastrado") {
           situacaoCadastro.classList.add("funcao_esconder");

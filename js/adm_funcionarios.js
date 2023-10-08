@@ -20,7 +20,7 @@ function deletarPedido(acao) {
   });
 }
 
-function receberResposta(acao) {
+function receberResposta(acao,pedido) {
   const url = `http://localhost:5000/${acao}`;
   console.log(url)
   return fetch(url, {
@@ -128,7 +128,7 @@ function limpaTabela() {
 
 function criaTabela(ordem) {
   acao = "usuarios?sort=" + ordem;
-  receberResposta(acao)
+  receberResposta(acao,pedido)
     .then((listaFuncionarios) => {
     listaFuncionarios = listaFuncionarios.content;
       tabelaTransicao = [];
