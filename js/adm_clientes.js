@@ -18,7 +18,7 @@ criaTabela(ordem);
 
 function deletarPedido(acao) {
   console.log(acao)
-  return fetch(`http://localhost:5000/${acao}`, {
+  return fetch(`https://mercadoalves.azurewebsites.net/${acao}`, {
     method: 'DELETE',
   })
   .catch(error => {
@@ -28,7 +28,7 @@ function deletarPedido(acao) {
 }
 
 function receberResposta(acao) {
-  const url = `http://localhost:5000/${acao}`;
+  const url = `https://mercadoalves.azurewebsites.net/${acao}`;
   console.log(url)
   return fetch(url, {
     method: 'GET',

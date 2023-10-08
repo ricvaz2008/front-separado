@@ -1,10 +1,10 @@
 var tabelaResultante = document.getElementById("itens_edicao");
 var coluna = "codigo";
-var ordem = "ASC";
-var ordem_zero = "ASC";
-var ordem_um = "ASC";
-var ordem_dois = "ASC";
-var ordem_tres = "ASC";
+var ordem = "asc";
+var ordem_zero = "asc";
+var ordem_um = "asc";
+var ordem_dois = "asc";
+var ordem_tres = "asc";
 var numeroColunas = 7;
 var itensTela = 7;
 var quantidadeEdicao = 0;
@@ -15,7 +15,7 @@ criaTabela(coluna, ordem);
 
 function receberResposta(pedido) {
   const queryParams = new URLSearchParams(pedido).toString();
-  const url = `http://localhost:5000/${acao}?${queryParams}`;
+  const url = `https://mercadoalves.azurewebsites.net/${acao}?${queryParams}`;
   return fetch(url, {
     method: 'GET',
   })

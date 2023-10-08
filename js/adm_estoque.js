@@ -4,13 +4,13 @@ var itemEditar = [];
 var tabelaTransicao = [[]];
 var coluna = "codigo";
 var ordem = "codigo,asc";
-var ordem_zero = "crescente";
-var ordem_um = "crescente";
-var ordem_dois = "crescente";
-var ordem_tres = "crescente";
-var ordem_quatro = "crescente";
-var ordem_cinco = "crescente";
-var ordem_seis = "crescente";
+var ordem_zero = "asc";
+var ordem_um = "asc";
+var ordem_dois = "asc";
+var ordem_tres = "asc";
+var ordem_quatro = "asc";
+var ordem_cinco = "asc";
+var ordem_seis = "asc";
 var tipo = "texto";
 var itensTela = 7;
 var quantidadeEdicao = 0;
@@ -22,7 +22,7 @@ criaTabela(ordem);
 
 function deletarPedido(acao) {
   console.log(acao)
-  return fetch(`http://localhost:5000/${acao}`, {
+  return fetch(`https://mercadoalves.azurewebsites.net/${acao}`, {
     method: 'DELETE',
   })
   .catch(error => {
@@ -32,7 +32,7 @@ function deletarPedido(acao) {
 }
 
 function receberResposta(acao) {
-  const url = `http://localhost:5000/${acao}`;
+  const url = `https://mercadoalves.azurewebsites.net/${acao}`;
   console.log(url)
   return fetch(url, {
     method: 'GET',

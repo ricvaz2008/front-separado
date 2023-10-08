@@ -14,7 +14,7 @@ encontraItem();
 
 function receberResposta(acao,pedido) {
   const queryParams = new URLSearchParams(pedido).toString();
-  const url = `http://localhost:5000/${acao}?${queryParams}`;
+  const url = `https://mercadoalves.azurewebsites.net/${acao}?${queryParams}`;
   console.log(url)
   return fetch(url, {
     method: 'GET',
@@ -39,7 +39,7 @@ function receberResposta(acao,pedido) {
 }
 
 function mudarPedido(acao,pedido) {
-  return fetch(`http://localhost:5000/${acao}`, {
+  return fetch(`https://mercadoalves.azurewebsites.net/${acao}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json'

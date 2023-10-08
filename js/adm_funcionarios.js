@@ -1,11 +1,11 @@
 var tabelaResultante = document.getElementById("itens_edicao");
 var coluna = "id";
-var ordem = "ASC";
-var ordem_zero = "ASC";
-var ordem_um = "ASC";
-var ordem_dois = "ASC";
-var ordem_tres = "ASC";
-var ordem_quatro = "ASC";
+var ordem = "asc";
+var ordem_zero = "asc";
+var ordem_um = "asc";
+var ordem_dois = "asc";
+var ordem_tres = "asc";
+var ordem_quatro = "asc";
 var numeroColunas = 5;
 var itensTela = 6;
 var quantidadeEdicao = 0;
@@ -15,13 +15,13 @@ var acao = "usuarios";
 criaTabela(coluna, ordem);
 
 function deletarPedido(acao) {
-  return fetch(`http://localhost:5000/${acao}`, {
+  return fetch(`https://mercadoalves.azurewebsites.net/${acao}`, {
     method: 'DELETE',
   });
 }
 
 function receberResposta(acao,pedido) {
-  const url = `http://localhost:5000/${acao}`;
+  const url = `https://mercadoalves.azurewebsites.net/${acao}`;
   console.log(url)
   return fetch(url, {
     method: 'GET',

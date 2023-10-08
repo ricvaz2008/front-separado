@@ -27,7 +27,7 @@ nome_cliente.value = cliente[1];
 
 async function receberResposta(pedido) {
   const queryParams = new URLSearchParams(pedido).toString();
-  const url = `http://localhost:5000/${acao}?${queryParams}`;
+  const url = `https://mercadoalves.azurewebsites.net/${acao}?${queryParams}`;
   try {
     const response = await fetch(url, {
       method: 'GET',
