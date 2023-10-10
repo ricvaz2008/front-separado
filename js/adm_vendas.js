@@ -114,7 +114,7 @@ function criaTabela(ordem) {
           const cpf = item.cpf;
           const data = new Date(item.data);
           var mes = data.getMonth() + 1;
-          var dia = data.getDate();
+          var dia = data.getDate() +1;
           var ano = data.getFullYear();
           var novaData = dia + "/" + mes + "/" + ano;
           const cupom = item.cupom;
