@@ -3,7 +3,7 @@ var itensApagar = [];
 var itemEditar = [];
 var tabelaTransicao = [[]];
 var coluna = "cpf";
-var ordem = "cpf,asc";
+var ordem = "sortBy=cpf&sortOrder=asc";
 var ordem_zero = "asc";
 var ordem_um = "asc";
 var ordem_dois = "asc";
@@ -17,19 +17,17 @@ var acao = "clientes";
 criaTabela(ordem);
 
 function deletarPedido(acao) {
-  console.log(acao)
   return fetch(`https://mercadoalves-mercado.azuremicroservices.io/${acao}`, {
     method: 'DELETE',
   })
   .catch(error => {
     console.error('Erro ao enviar a solicitação de exclusão:', error);
-    throw error; // Re-throw the error to be handled where the function is called
+    throw error;
   });
 }
 
 function receberResposta(acao) {
   const url = `https://mercadoalves-mercado.azuremicroservices.io/${acao}`;
-  console.log(url)
   return fetch(url, {
     method: 'GET',
   })
@@ -163,49 +161,59 @@ function limpaTabela() {
 }
 
 function criaTabela(ordem) {
-  acao = "clientes?sort=" + ordem;
+  acao = "clientes/custom-listar?" + ordem;
   receberResposta(acao)
     .then((resposta) => {
-      resposta = resposta.content;
       tabelaTransicao = [];
-      tamanho = Object.keys(resposta).length;
+      const uniqueCpfMap = {};
       for (const key in resposta) {
         if (resposta.hasOwnProperty(key)) {
           const item = resposta[key];
           const cpf = item.cpf;
-          const nome = item.nome;
-          const ultimaCompra = item.ultimaCompra;
+          const data = new Date(item.data);
           const cupom = item.cupom;
-          const newRow = [cpf, nome, ultimaCompra, cupom];
-          tabelaTransicao.push(newRow);
+
+          if (!(cpf in uniqueCpfMap) || data > uniqueCpfMap[cpf].data) {
+            uniqueCpfMap[cpf] = {
+              cpf: cpf,
+              nome: item.nome,
+              data: data,
+              cupom: cupom,
+            };
+          }
         }
       }
-      tamanho = tabelaTransicao.length;
-      for (i = 0; i < tamanho; i++) {
+
+      tabelaTransicao = Object.values(uniqueCpfMap);
+      tabelaTransicao.sort((a, b) => b.data - a.data);
+
+      for (i = 0; i < tabelaTransicao.length; i++) {
         var linha = tabelaResultante.insertRow(i);
         linha.removeAttribute("id");
-        linha.setAttribute("id", tabelaTransicao[i][0]);
+        linha.setAttribute("id", tabelaTransicao[i].cpf);
         linha.setAttribute("onclick", "escolheLinha(id)");
-        for (j = 0; j < itensTela; j++) {
-          if (j == 2) {
-            var data = new Date(tabelaTransicao[i][j]);
-            var mes = data.getMonth() + 1;
-            var dia = data.getDate();
-            var ano = data.getFullYear();
-            if (ano == 1969) {
-              tabelaTransicao[i][j] = "Não realizou compras";
-            } else {
-              tabelaTransicao[i][j] = dia + "/" + mes + "/" + ano;
-            }
-          }
-          var cell1 = linha.insertCell(j);
-          cell1.innerHTML = tabelaTransicao[i][j];
+        
+        var cpfCell = linha.insertCell(0);
+        cpfCell.innerHTML = tabelaTransicao[i].cpf;
+        var nomeCell = linha.insertCell(1);
+        nomeCell.innerHTML = tabelaTransicao[i].nome;
+        var ultimaCompraCell = linha.insertCell(2);
+        var data = tabelaTransicao[i].data;
+        if (data.getFullYear() === 1969) {
+          ultimaCompraCell.innerHTML = "Não realizou compras";
+        } else {
+          var mes = data.getMonth() + 1;
+          var dia = data.getDate();
+          var ano = data.getFullYear();
+          ultimaCompraCell.innerHTML = dia + "/" + mes + "/" + ano;
         }
+        var cupomCell = linha.insertCell(3);
+        cupomCell.innerHTML = tabelaTransicao[i].cupom;
       }
     })
-    .catch(error => {
-      console.error('Erro:', error);
-      throw new Error('Erro ao processar a resposta do servidor');
+    .catch((error) => {
+      console.error("Erro:", error);
+      throw new Error("Erro ao processar a resposta do servidor");
     });
 }
 
@@ -224,7 +232,7 @@ organiza_col_zero.addEventListener("click", (event) => {
   coluna = "cpf";
   if (ordem_zero == "asc") ordem_zero = "desc";
   else ordem_zero = "asc";
-  ordem = coluna + "," + ordem_zero;
+  ordem = "sortBy=" + coluna + "&sortOrder=" + ordem_zero;
   limpaTabela();
   criaTabela(ordem);
 })
@@ -233,7 +241,7 @@ organiza_col_um.addEventListener("click", (event) => {
   coluna = "nome";
   if (ordem_um == "asc") ordem_um = "desc";
   else ordem_um = "asc";
-  ordem = coluna + "," + ordem_um;
+  ordem = "sortBy=" + coluna + "&sortOrder=" + ordem_um;
   limpaTabela();
   criaTabela(ordem);
 })
@@ -242,7 +250,7 @@ organiza_col_dois.addEventListener("click", (event) => {
   coluna = "data";
   if (ordem_dois == "asc") ordem_dois = "desc";
   else ordem_dois = "asc";
-  ordem = coluna + "," + ordem_dois;
+  ordem = "sortBy=" + coluna + "&sortOrder=" + ordem_dois;
   limpaTabela();
   criaTabela(ordem);
 })
@@ -251,7 +259,7 @@ organiza_col_tres.addEventListener("click", (event) => {
   coluna = "cupom";
   if (ordem_tres == "asc") ordem_tres = "desc";
   else ordem_tres = "asc";
-  ordem = coluna + "," + ordem_tres;
+  ordem = "sortBy=" + coluna + "&sortOrder=" + ordem_tres;
   limpaTabela();
   criaTabela(ordem);
 })

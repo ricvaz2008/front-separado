@@ -12,7 +12,6 @@ acao = "clientes";
 function receberResposta(acao,pedido) {
   const queryParams = new URLSearchParams(pedido).toString();
   const url = `https://mercadoalves-mercado.azuremicroservices.io/${acao}?${queryParams}`;
-  console.log(url)
   return fetch(url, {
     method: 'GET',
   })

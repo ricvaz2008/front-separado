@@ -12,7 +12,7 @@ var ordem_tres = "asc";
 var coluna = "data";
 acao="clientes";
 
-function receberMensagem(pedido) {
+function receberMensagem(acao,pedido) {
   const queryParams = new URLSearchParams(pedido).toString();
   const url = `https://mercadoalves-mercado.azuremicroservices.io/${acao}?${queryParams}`;
   return fetch(url, {
@@ -33,7 +33,7 @@ function encontraItem() {
     cpf: indexador
   };
   acao = acao + "/localiza-cliente";
-  receberMensagem(pedido)
+  receberMensagem(acao,pedido)
     .then(resposta => resposta.json())
     .then(produto => {
       var linhaNome = detalhesCliente.insertRow(0);
@@ -76,12 +76,12 @@ function escolheLinha(id) {
 
 function listaCompras(coluna, ordem) {
   const pedido = {
-    action: "informacoesComprasCPF",
     cpf: indexador,
-    coluna: coluna,
-    ordem: ordem
+    sortOrder: ordem,
+    sortField: coluna
   };
-  receberMensagem(pedido)
+  acao = "vendas/venda-cpf"
+  receberMensagem(acao,pedido)
     .then(resposta => resposta.json())
     .then(compras => {
       tabelaTransicao = [];
@@ -91,7 +91,7 @@ function listaCompras(coluna, ordem) {
           const item = compras[key];
           const data = item.data;
           const hora = item.hora;
-          const valor = "R$ " + (item.valor).toFixed(2);
+          const valor = "R$ " + (item.valorTotal).toFixed(2);
           const cupom = item.cupom;
           const newRow = [data, hora, valor, cupom];
           tabelaTransicao.push(newRow);
@@ -120,7 +120,7 @@ function listaCompras(coluna, ordem) {
 }
 
 organiza_col_zero.addEventListener("click", (event) => {
-  coluna = "v.data";
+  coluna = "data";
   if (ordem_zero == "asc") ordem_zero = "desc";
   else ordem_zero = "asc";
   ordem = ordem_zero;
@@ -129,7 +129,7 @@ organiza_col_zero.addEventListener("click", (event) => {
 });
 
 organiza_col_um.addEventListener("click", (event) => {
-  coluna = "v.hora";
+  coluna = "hora";
   if (ordem_um == "asc") ordem_um = "desc";
   else ordem_um = "asc";
   ordem = ordem_um;
@@ -138,7 +138,7 @@ organiza_col_um.addEventListener("click", (event) => {
 });
 
 organiza_col_dois.addEventListener("click", (event) => {
-  coluna = "v.valor";
+  coluna = "valorTotal";
   if (ordem_dois == "asc") ordem_dois = "desc";
   else ordem_dois = "asc";
   ordem = ordem_dois;
@@ -147,7 +147,7 @@ organiza_col_dois.addEventListener("click", (event) => {
 });
 
 organiza_col_tres.addEventListener("click", (event) => {
-  coluna = "i.cupom";
+  coluna = "cupom";
   if (ordem_tres == "asc") ordem_tres = "desc";
   else ordem_tres = "asc";
   ordem = ordem_tres;

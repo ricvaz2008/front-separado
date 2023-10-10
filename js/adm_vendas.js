@@ -5,17 +5,21 @@ var ordem_zero = "asc";
 var ordem_um = "asc";
 var ordem_dois = "asc";
 var ordem_tres = "asc";
+var ordem_quatro = "asc";
+var ordem_cinco = "asc";
+var ordem_seis = "asc";
 var numeroColunas = 7;
 var itensTela = 7;
 var quantidadeEdicao = 0;
 var pedido = {};
 var info = document.getElementById("maisInfo");
+acao = "joined-data";
 
 criaTabela(coluna, ordem);
 
-function receberResposta(pedido) {
+function receberResposta(acao,pedido) {
   const queryParams = new URLSearchParams(pedido).toString();
-  const url = `https://mercadoalves-mercado.azuremicroservices.io/${acao}?${queryParams}`;
+  const url = `https://mercadoalves-mercado.azuremicroservices.io/${acao}`;
   return fetch(url, {
     method: 'GET',
   })
@@ -90,14 +94,9 @@ function limpaTabela() {
   tabelaTransicao = [[]];
 }
 
-function criaTabela(coluna, ordem) {
-  pedido = {
-    action: "atualizaVendas",
-    coluna: coluna,
-    ordem: ordem
-  };
-
-  receberResposta(pedido)
+function criaTabela(ordem) {
+  acao = "itensVenda/joined-data?" + ordem;
+  receberResposta(acao)
     .then((listaVendas) => {
       tabelaTransicao = [];
       tamanho = Object.keys(listaVendas).length;
@@ -106,9 +105,12 @@ function criaTabela(coluna, ordem) {
 
         if (listaVendas.hasOwnProperty(key)) {
           const item = listaVendas[key];
-          const codigo = item.codigo;
+          var codigo = item.codigo;
+          const parts = codigo.split("LOTE");
+          codigo = parts[0];
           const produto = item.produto;
-          const valor = item.valor;
+          var valor = item.valorTotal;
+          valor = valor.toFixed(2);
           const cpf = item.cpf;
           const data = new Date(item.data);
           var mes = data.getMonth() + 1;
@@ -141,69 +143,69 @@ function criaTabela(coluna, ordem) {
 organiza_col_zero.addEventListener("click", (event) => {
   coluna = "codigo";
 
-  if (ordem_zero == "ASC") ordem_zero = "DESC";
-  else ordem_zero = "ASC";
-  ordem = ordem_zero;
+  if (ordem_zero == "asc") ordem_zero = "desc";
+  else ordem_zero = "asc";
+  ordem = "sortBy=" + coluna + "&sortOrder=" + ordem_zero;
   limpaTabela();
-  criaTabela(coluna, ordem);
+  criaTabela(ordem);
 });
 
 organiza_col_um.addEventListener("click", (event) => {
   coluna = "produto";
 
-  if (ordem_um == "ASC") ordem_um = "DESC";
-  else ordem_um = "ASC";
-  ordem = ordem_um;
+  if (ordem_um == "asc") ordem_um = "desc";
+  else ordem_um = "asc";
+  ordem = "sortBy=" + coluna + "&sortOrder=" + ordem_um;
   limpaTabela();
-  criaTabela(coluna, ordem);
+  criaTabela(ordem);
 });
 
 organiza_col_dois.addEventListener("click", (event) => {
-  coluna = "valor";
+  coluna = "valorTotal";
 
-  if (ordem_dois == "ASC") ordem_dois = "DESC";
-  else ordem_dois = "ASC";
-  ordem = ordem_dois;
+  if (ordem_dois == "asc") ordem_dois = "desc";
+  else ordem_dois = "asc";
+  ordem = "sortBy=" + coluna + "&sortOrder=" + ordem_dois;
   limpaTabela();
-  criaTabela(coluna, ordem);
+  criaTabela(ordem);
 });
 
 organiza_col_tres.addEventListener("click", (event) => {
   coluna = "cpf";
 
-  if (ordem_tres == "ASC") ordem_tres = "DESC";
-  else ordem_tres = "ASC";
-  ordem = ordem_tres;
+  if (ordem_tres == "asc") ordem_tres = "desc";
+  else ordem_tres = "asc";
+  ordem = "sortBy=" + coluna + "&sortOrder=" + ordem_tres;
   limpaTabela();
-  criaTabela(coluna, ordem);
+  criaTabela(ordem);
 });
 
 organiza_col_quatro.addEventListener("click", (event) => {
   coluna = "data";
 
-  if (ordem_tres == "ASC") ordem_tres = "DESC";
-  else ordem_tres = "ASC";
-  ordem = ordem_tres;
+  if (ordem_tres == "asc") ordem_tres = "desc";
+  else ordem_tres = "asc";
+  ordem = "sortBy=" + coluna + "&sortOrder=" + ordem_quatro;
   limpaTabela();
-  criaTabela(coluna, ordem);
+  criaTabela(ordem);
 });
 
 organiza_col_cinco.addEventListener("click", (event) => {
   coluna = "cupom";
 
-  if (ordem_tres == "ASC") ordem_tres = "DESC";
-  else ordem_tres = "ASC";
-  ordem = ordem_tres;
+  if (ordem_tres == "asc") ordem_tres = "desc";
+  else ordem_tres = "asc";
+  ordem = "sortBy=" + coluna + "&sortOrder=" + ordem_cinco;
   limpaTabela();
-  criaTabela(coluna, ordem);
+  criaTabela(ordem);
 });
 
 organiza_col_seis.addEventListener("click", (event) => {
   coluna = "pagamento";
 
-  if (ordem_tres == "ASC") ordem_tres = "DESC";
-  else ordem_tres = "ASC";
-  ordem = ordem_tres;
+  if (ordem_tres == "asc") ordem_tres = "desc";
+  else ordem_tres = "asc";
+  ordem = "sortBy=" + coluna + "&sortOrder=" + ordem_seis;
   limpaTabela();
-  criaTabela(coluna, ordem);
+  criaTabela(ordem);
 });

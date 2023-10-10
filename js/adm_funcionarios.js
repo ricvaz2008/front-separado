@@ -22,7 +22,6 @@ function deletarPedido(acao) {
 
 function receberResposta(acao,pedido) {
   const url = `https://mercadoalves-mercado.azuremicroservices.io/${acao}`;
-  console.log(url)
   return fetch(url, {
     method: 'GET',
   })

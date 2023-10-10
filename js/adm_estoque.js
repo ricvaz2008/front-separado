@@ -21,19 +21,17 @@ var acao = "estoque";
 criaTabela(ordem);
 
 function deletarPedido(acao) {
-  console.log(acao)
   return fetch(`https://mercadoalves-mercado.azuremicroservices.io/${acao}`, {
     method: 'DELETE',
   })
   .catch(error => {
     console.error('Erro ao enviar a solicitação de exclusão:', error);
-    throw error; // Re-throw the error to be handled where the function is called
+    throw error;
   });
 }
 
 function receberResposta(acao) {
   const url = `https://mercadoalves-mercado.azuremicroservices.io/${acao}`;
-  console.log(url)
   return fetch(url, {
     method: 'GET',
   })
@@ -138,7 +136,7 @@ function apagaItem() {
   });
   tamanho = linhasApagar.length;
   for (var i = 0; i < tamanho; i++) {
-    acao = acao + "/" + linhasApagar[i],
+    acao = "estoque/" + linhasApagar[i],
     deletarPedido(acao)
       .then((resposta) => resposta.json())
       .then((statusApaga) => {

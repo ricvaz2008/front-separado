@@ -38,7 +38,6 @@ form.addEventListener("submit", (evento) => {
 
   receberResposta(acao,pedido)
     .then(responseData => {
-      console.log(responseData)
       const acesso = responseData.acesso;
       const acessoUpperCase = acesso.toUpperCase();
       if (acessoUpperCase  == "FUNCIONÁRIO") acessoUpperCase  = "FUNCIONARIO";

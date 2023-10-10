@@ -21,11 +21,12 @@ var itensTela = 6;
 var indiceDaLinha = 0;
 tabelaTransicao = [];
 let subtotal = 0;
+acao = "estoque";
 
 cpf_cliente.value = cliente[0];
 nome_cliente.value = cliente[1];
 
-async function receberResposta(pedido) {
+async function receberResposta(acao,pedido) {
   const queryParams = new URLSearchParams(pedido).toString();
   const url = `https://mercadoalves-mercado.azuremicroservices.io/${acao}?${queryParams}`;
   try {
@@ -87,19 +88,20 @@ function pagamento() {
 
 async function atualizaCampos(codProduto) {
   pedido = {
-    action: "localizaProdutoVenda",
-    codProduto: codProduto,
+    codigo: codProduto,
   };
-  receberResposta(pedido)
+  acao = acao + "/localiza-estoque";
+  receberResposta(acao,pedido)
     .then(produto => {
+      produto = produto[0];
       nomeProduto.value = produto.produto;
-      valorVenda.value = produto.valor;
+      valorVenda.value = produto.valor.toFixed(2);
       endFoto.src = produto.foto;
       const descricao = produto.produto;
       const codigoCompleto = produto.codigo;
       const codigoProduto = produto.codigo.split("LOTE")[0].trim();
       const quantidade = new Number(quantidadeItens.value);
-      const valor = new Number(produto.valor.toFixed(2));
+      const valor = produto.valor.toFixed(2);
       const total = new Number((quantidade * valor).toFixed(2));
       subtotal = parseFloat((parseFloat(subtotal) + total).toFixed(2)).toFixed(2);
       indiceDaLinha++;
@@ -114,6 +116,7 @@ async function atualizaCampos(codProduto) {
       subtotalCompra.value = subtotal;
     });
     codigoProduto.setAttribute("autofocus", "autofocus");
+    acao = "estoque";
 }
 
 function limpaTabela() {

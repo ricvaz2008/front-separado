@@ -3,11 +3,12 @@ var infoCupom = document.getElementById("detalhes_cliente");
 var conteudoCupom = document.getElementById("lista");
 var indexador = JSON.parse(localStorage.getItem("idDetalhe"));
 var itensTela = 3;
+acao = "vendas";
 
 criaInformacoesCupom(indexador);
 listaCompras(indexador);
 
-function receberResposta(pedido) {
+function receberResposta(acao,pedido) {
   const queryParams = new URLSearchParams(pedido).toString();
   const url = `https://mercadoalves-mercado.azuremicroservices.io/${acao}?${queryParams}`;
   return fetch(url, {
@@ -33,11 +34,12 @@ function receberResposta(pedido) {
 }
 
 function criaInformacoesCupom(indexador) {
+  indexador = indexador.split("-")[0];
   pedido = {
-    action: "informacoesGeraisCupom",
     cupom: indexador,
   };
-  receberResposta(pedido)
+  acao = "vendas/localiza-venda";
+  receberResposta(acao,pedido)
     .then((informacoesCupom) => {
       for (i = 0; i < 6; i++) {
         var linha = infoCupom.insertRow(i);
@@ -69,7 +71,7 @@ function criaInformacoesCupom(indexador) {
             break;
 
           case 4:
-            linha.innerHTML = "Valor total: R$ " + informacoesCupom.valor;
+            linha.innerHTML = "Valor total: R$ " + informacoesCupom.valorTotal.toFixed(2);
             linha.setAttribute("class", "nome_informacoes");
             break;
 
@@ -84,10 +86,10 @@ function criaInformacoesCupom(indexador) {
 
 function listaCompras(indexador) {
   pedido = {
-    action: "localizaCupom",
-    cupom: indexador.split("-")[0],
+    partialNumeroCupom: indexador.split("-")[0],
   };
-  receberResposta(pedido)
+  acao = "itensVenda/localiza-itemVenda"
+  receberResposta(acao,pedido)
     .then((cupom) => {
       tabelaTransicao = [];
       tamanho = Object.keys(cupom).length;
@@ -96,7 +98,7 @@ function listaCompras(indexador) {
           const item = cupom[key];
           const quantidade = item.quantidade;
           const descricao = item.produto;
-          const valor = item.valor;
+          const valor = "R$" + item.valorTotal.toFixed(2);
           const newRow = [quantidade, descricao, valor];
           tabelaTransicao.push(newRow);
         }

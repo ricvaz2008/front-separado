@@ -16,7 +16,6 @@ encontraItem();
 function receberResposta(acao,pedido) {
   const queryParams = new URLSearchParams(pedido).toString();
   const url = `https://mercadoalves-mercado.azuremicroservices.io/${acao}?${queryParams}`;
-  console.log(url)
   return fetch(url, {
     method: 'GET',
   })
@@ -57,10 +56,13 @@ function encontraItem() {
 
   receberResposta(acao,pedido)
     .then(produto => {
+      produto = produto[0];
       nomeProduto.value = produto.produto;
       codProduto.value = produto.codigo;
-      data = new Date (produto.vencimento);
-      vencProduto.value = (data.getMonth()+1) + "-" + (data.getDate()) + "-" + (data.getFullYear());
+      data = new Date(produto.vencimento);
+      const month = (data.getMonth() + 1).toString().padStart(2, '0');
+      const day = data.getDate().toString().padStart(2, '0');
+      vencProduto.value = month + "-" + day + "-" + (data.getFullYear());
       loteProduto.value = produto.lote;
       valorVenda.value = produto.valor;
       quantProduto.value = produto.quantidade;

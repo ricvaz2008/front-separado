@@ -571,7 +571,7 @@ table.nv_tabela_itens th:nth-child(n+1) {
     overflow: hidden;
 }
 table.nv_tabela_itens th:nth-child(n+2) {
-    width: 8vw;
+    width: 10vw;
     overflow: hidden;
 }
 table.nv_tabela_itens th:nth-child(n+3) {
@@ -601,7 +601,7 @@ table.nv_tabela_itens td:nth-child(n+1) {
     overflow: hidden;
 }
 table.nv_tabela_itens td:nth-child(n+2) {
-    width: 8vw;
+    width: 10vw;
     overflow: hidden;
 }
 table.nv_tabela_itens td:nth-child(n+3) {
