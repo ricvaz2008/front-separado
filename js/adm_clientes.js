@@ -17,7 +17,7 @@ var acao = "clientes";
 criaTabela(ordem);
 
 function deletarPedido(acao) {
-  return fetch(`https://mercadoalves-mercado.azuremicroservices.io/${acao}`, {
+  return fetch(`http://localhost:5000/${acao}`, {
     method: 'DELETE',
   })
   .catch(error => {
@@ -27,7 +27,7 @@ function deletarPedido(acao) {
 }
 
 function receberResposta(acao) {
-  const url = `https://mercadoalves-mercado.azuremicroservices.io/${acao}`;
+  const url = `http://localhost:5000/${acao}`;
   return fetch(url, {
     method: 'GET',
   })
@@ -59,6 +59,7 @@ function ultimasCompras(dias) {
     var dia = data.slice(0, barra);
     barra2 = data.indexOf("/", barra + 1);
     var mes = data.slice(barra + 1, barra2);
+    mes = mes + 1;
     var ano = data.slice(barra2 + 1);
     compras = new Date(mes + "/" + dia + "/" + ano);
     var prazoCompras = (hoje - compras) / 1000 / 60 / 60 / 24;
@@ -164,6 +165,7 @@ function criaTabela(ordem) {
   acao = "clientes/custom-listar?" + ordem;
   receberResposta(acao)
     .then((resposta) => {
+      console.log(resposta)
       tabelaTransicao = [];
       const uniqueCpfMap = {};
       for (const key in resposta) {

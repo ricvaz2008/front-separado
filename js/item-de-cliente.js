@@ -106,7 +106,7 @@ function listaCompras(coluna, ordem) {
           if (j == 0) {
             var data = new Date(tabelaTransicao[i][j]);
             var mes = data.getMonth() + 1;
-            var dia = data.getDate();
+            var dia = data.getDate() + 1;
             var ano = data.getFullYear();
             tabelaTransicao[i][j] = dia + "/" + mes + "/" + ano;
           }
