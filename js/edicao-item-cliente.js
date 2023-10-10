@@ -57,7 +57,7 @@ function encontraItem() {
     .then(cliente => {
       novoNome.value = cliente.nome;
       data = new Date(cliente.nascimento);
-      novoNascimento.value = (data.getFullYear()) + "-" + (data.getMonth() + 1) + "-" + (data.getDate());
+      novoNascimento.value = (data.getFullYear()) + "-" + (data.getMonth() + 1) + "-" + (data.getDate() + 1);
       novoCPF.value = indexador;
       novoTelefone.value = cliente.telefone;
       novoEmail.value = cliente.email;

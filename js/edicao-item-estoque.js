@@ -61,7 +61,7 @@ function encontraItem() {
       codProduto.value = produto.codigo;
       data = new Date(produto.vencimento);
       const month = (data.getMonth() + 1).toString().padStart(2, '0');
-      const day = data.getDate().toString().padStart(2, '0');
+      const day = (data.getDate() + 1).toString().padStart(2, '0');
       vencProduto.value = month + "-" + day + "-" + (data.getFullYear());
       loteProduto.value = produto.lote;
       valorVenda.value = produto.valor;

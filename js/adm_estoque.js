@@ -177,7 +177,7 @@ function criaTabela(ordem) {
           const lote = item.lote;
           let quantidade = item.quantidade;
           if (quantidade < 0) quantidade = 0;
-          const valorVenda = item.valor;
+          const valorVenda = item.valor.toFixed(2);
           const vencimento = item.vencimento;
           const status = item.status;
           const newRow = [codigo, produto, lote, quantidade, valorVenda, vencimento, status];
@@ -195,7 +195,7 @@ function criaTabela(ordem) {
           if (j == 5) {
             var data = tabelaTransicao[i][j];
             data = new Date(data);
-            tabelaTransicao[i][j] = (data.getDate()) + "/" + (data.getMonth() + 1) + "/" + (data.getFullYear());
+            tabelaTransicao[i][j] = (data.getDate() + 1) + "/" + (data.getMonth() + 1) + "/" + (data.getFullYear());
           } else if (j == 4) {
             var numeroValor = tabelaTransicao[i][j];
             tabelaTransicao[i][j] = "R$ " + numeroValor;

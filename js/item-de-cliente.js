@@ -63,7 +63,7 @@ function encontraItem() {
       var linhaNascimento = detalhesCliente.insertRow(6);
       var cellNascimento = linhaNascimento.insertCell(0);
       var dataNascimento = new Date (produto.nascimento);
-      cellNascimento.innerHTML = "Data de nascimento: " + (dataNascimento.getDate() + "/" + (dataNascimento.getMonth()+1) + "/" + dataNascimento.getFullYear());
+      cellNascimento.innerHTML = "Data de nascimento: " + ((dataNascimento.getDate() + 1) + "/" + (dataNascimento.getMonth()+1) + "/" + dataNascimento.getFullYear());
       cellNascimento.setAttribute("class", "nome_informacoes");
     });
 }
