@@ -57,7 +57,8 @@ function encontraItem() {
     .then(cliente => {
       novoNome.value = cliente.nome;
       data = new Date(cliente.nascimento);
-      novoNascimento.value = (data.getFullYear()) + "-" + (data.getMonth() + 1) + "-" + (data.getDate() + 1);
+      data = new Date(data.getTime() + data.getTimezoneOffset() * 60000);
+      novoNascimento.value = (data.getFullYear()) + "-" + (data.getMonth() + 1) + "-" + (data.getDate());
       novoCPF.value = indexador;
       novoTelefone.value = cliente.telefone;
       novoEmail.value = cliente.email;
@@ -69,7 +70,8 @@ function encontraItem() {
 }
 
 function confirmaCadastro() {
-  const data = new Date(novoNascimento.value);
+  var data = new Date(novoNascimento.value);
+  data = new Date(data.getTime() + data.getTimezoneOffset() * 60000);
   const year = data.getFullYear();
   const month = (data.getMonth() + 1).toString().padStart(2, '0');
   const day = data.getDate().toString().padStart(2, '0');

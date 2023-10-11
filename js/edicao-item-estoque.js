@@ -60,8 +60,9 @@ function encontraItem() {
       nomeProduto.value = produto.produto;
       codProduto.value = produto.codigo;
       data = new Date(produto.vencimento);
+      data = new Date(data.getTime() + data.getTimezoneOffset() * 60000);
       const month = (data.getMonth() + 1).toString().padStart(2, '0');
-      const day = (data.getDate() + 1).toString().padStart(2, '0');
+      const day = data.getDate().toString().padStart(2, '0');
       vencProduto.value = month + "-" + day + "-" + (data.getFullYear());
       loteProduto.value = produto.lote;
       valorVenda.value = produto.valor;
@@ -77,7 +78,8 @@ function carregaFoto(){
 }
 
 function confirmaCadastro() {
-  const data = new Date(vencProduto.value);
+  var data = new Date(vencProduto.value);
+  data = new Date(data.getTime() + data.getTimezoneOffset() * 60000);
   const year = data.getFullYear();
   const month = (data.getMonth() + 1).toString().padStart(2, '0');
   const day = data.getDate().toString().padStart(2, '0');

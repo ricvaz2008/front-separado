@@ -71,6 +71,7 @@ function sinalizaVencimento(dias) {
   for (var i = 0; i < tamanho; i++) {
     var vencimento = tabelaResultante.rows[i].cells[5].innerHTML;
     var vencimentoFormatado = new Date(formataData(vencimento));
+    vencimentoFormatado = new Date(vencimentoFormatado.getTime() + vencimentoFormatado.getTimezoneOffset() * 60000);
     var prazoParaVencimento = (vencimentoFormatado - hoje) / 1000 / 60 / 60 / 24;
     if (prazoParaVencimento <= dias) {
       tabelaResultante.rows[i].cells[5].classList.add("edicao_vencido");
@@ -177,7 +178,7 @@ function criaTabela(ordem) {
           const lote = item.lote;
           let quantidade = item.quantidade;
           if (quantidade < 0) quantidade = 0;
-          const valorVenda = item.valor.toFixed(2);
+          const valorVenda = item.valor;
           const vencimento = item.vencimento;
           const status = item.status;
           const newRow = [codigo, produto, lote, quantidade, valorVenda, vencimento, status];
@@ -195,7 +196,8 @@ function criaTabela(ordem) {
           if (j == 5) {
             var data = tabelaTransicao[i][j];
             data = new Date(data);
-            tabelaTransicao[i][j] = (data.getDate() + 1) + "/" + (data.getMonth() + 1) + "/" + (data.getFullYear());
+            data = new Date(data.getTime() + data.getTimezoneOffset() * 60000);
+            tabelaTransicao[i][j] = (data.getDate()) + "/" + (data.getMonth() + 1) + "/" + (data.getFullYear());
           } else if (j == 4) {
             var numeroValor = tabelaTransicao[i][j];
             tabelaTransicao[i][j] = "R$ " + numeroValor;

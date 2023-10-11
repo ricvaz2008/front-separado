@@ -165,14 +165,14 @@ function criaTabela(ordem) {
   acao = "clientes/custom-listar?" + ordem;
   receberResposta(acao)
     .then((resposta) => {
-      console.log(resposta)
       tabelaTransicao = [];
       const uniqueCpfMap = {};
       for (const key in resposta) {
         if (resposta.hasOwnProperty(key)) {
           const item = resposta[key];
           const cpf = item.cpf;
-          const data = new Date(item.data);
+          var data = new Date(item.data);
+          data = new Date(data.getTime() + data.getTimezoneOffset() * 60000);
           const cupom = item.cupom;
 
           if (!(cpf in uniqueCpfMap) || data > uniqueCpfMap[cpf].data) {

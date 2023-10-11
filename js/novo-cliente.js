@@ -25,7 +25,8 @@ function apagar() {
 
 function confirmaCadastro() {
   if (novoNome && novoNascimento && novoCPF && novoTelefone && novoEmail && novoEndereco && novoCidade && novoEstado && novoCEP) {
-    const data = new Date(novoNascimento.value);
+    var data = new Date(novoNascimento.value);
+    data = new Date(data.getTime() + data.getTimezoneOffset() * 60000);
     const year = data.getFullYear();
     const month = (data.getMonth() + 1).toString().padStart(2, '0');
     const day = data.getDate().toString().padStart(2, '0');

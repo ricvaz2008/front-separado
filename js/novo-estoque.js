@@ -31,10 +31,12 @@ function carregaFoto() {
 
 function confirmaCadastro() {
   if (nomeProduto && codProduto && vencProduto && loteProduto && valorVenda && quantProduto && estVenda) {
-    const data = new Date(vencProduto.value);
+    var data = new Date(vencProduto.value);
+    data = new Date(data.getTime() + data.getTimezoneOffset() * 60000);
     const year = data.getFullYear();
     const month = (data.getMonth() + 1).toString().padStart(2, '0');
     const day = data.getDate().toString().padStart(2, '0');
+
     vencProduto.value = year + "-" + month + "-" + day;
 
     const pedido = {

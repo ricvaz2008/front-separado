@@ -63,7 +63,8 @@ function encontraItem() {
       var linhaNascimento = detalhesCliente.insertRow(6);
       var cellNascimento = linhaNascimento.insertCell(0);
       var dataNascimento = new Date (produto.nascimento);
-      cellNascimento.innerHTML = "Data de nascimento: " + ((dataNascimento.getDate() + 1) + "/" + (dataNascimento.getMonth()+1) + "/" + dataNascimento.getFullYear());
+      dataNascimento = new Date(data.getTime() + data.getTimezoneOffset() * 60000);
+      cellNascimento.innerHTML = "Data de nascimento: " + (dataNascimento.getDate() + "/" + (dataNascimento.getMonth()+1) + "/" + dataNascimento.getFullYear());
       cellNascimento.setAttribute("class", "nome_informacoes");
     });
 }
@@ -105,6 +106,7 @@ function listaCompras(coluna, ordem) {
         for (let j = 0; j < itensTela; j++) {
           if (j == 0) {
             var data = new Date(tabelaTransicao[i][j]);
+            data = new Date(data.getTime() + data.getTimezoneOffset() * 60000);
             var mes = data.getMonth() + 1;
             var dia = data.getDate() + 1;
             var ano = data.getFullYear();

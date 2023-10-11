@@ -43,7 +43,8 @@ function criaInformacoesCupom(indexador) {
     .then((informacoesCupom) => {
       for (i = 0; i < 6; i++) {
         var linha = infoCupom.insertRow(i);
-        const data = new Date(informacoesCupom.data);
+        var data = new Date(informacoesCupom.data);
+        data = new Date(data.getTime() + data.getTimezoneOffset() * 60000);
         var mes = data.getMonth() + 1;
         var dia = data.getDate() + 1;
         var ano = data.getFullYear();
