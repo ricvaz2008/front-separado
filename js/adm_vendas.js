@@ -114,14 +114,11 @@ function criaTabela(ordem) {
           const cpf = item.cpf;
           var data = new Date(item.data);
           data = new Date(data.getTime() + data.getTimezoneOffset() * 60000);
-          console.log(data)
-          console.log(item.data)
           var mes = data.getMonth() + 1;
           var dia = data.getDate();
           var ano = data.getFullYear();
           var novaData = dia + "/" + mes + "/" + ano;
           const cupom = item.cupom;
-          console.log(cupom)
           const pagamento = item.pagamento;
           const newRow = [codigo, produto, valor, cpf, novaData, cupom, pagamento];
           info.classList.add("edicao_nao_ativo");

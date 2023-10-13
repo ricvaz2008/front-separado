@@ -195,7 +195,6 @@ function pagamentoRecebido() {
 
 function atualizaTabelaVendas() {
   var data = new Date();
-  console.log(data)
   var mes = (data.getMonth() + 1).toString().padStart(2, '0');
   var dia = data.getDate().toString().padStart(2, '0');
   var ano = data.getFullYear();
